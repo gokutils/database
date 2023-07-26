@@ -104,6 +104,6 @@ func (l *LockerDB) Close() {
 	l.db.Close()
 }
 
-func NewLockerDB(db *sql.DB, driver string) *LockerDB {
+func NewLockerDB(db *sql.DB, driver string) DB {
 	return &LockerDB{db: db, lock: &sync.Mutex{}, driver: driver}
 }
