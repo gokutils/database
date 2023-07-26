@@ -37,4 +37,6 @@ type DB interface {
 	GetQueryerAndUnLocker(ctx context.Context) (Queryer, func())
 	GetQueryerLocked(ctx context.Context, fn func(Queryer) error) error
 	GetDatabaseLocked(ctx context.Context, fn func(db DatabaseInterface) error) error
+	Driver() string
+	Close()
 }
