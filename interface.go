@@ -5,6 +5,8 @@ import (
 	"database/sql"
 )
 
+var _ DB = &LockerDB{}
+
 type Scan interface {
 	Scan(v ...interface{}) error
 }
@@ -12,7 +14,7 @@ type Scan interface {
 type Scanner func(row Scan) error
 
 type QueryExecutor interface {
-	ExecContext(ctx context.Context, scanner Scanner, sql string) error
+	ExecContext(ctx context.Context, sql string, args ...interface{}) error
 	QueryRowContext(ctx context.Context, scanner Scanner, sql string, args ...interface{}) error
 	QueryContext(ctx context.Context, scanner Scanner, sql string, args ...interface{}) error
 }
@@ -34,5 +36,5 @@ type DB interface {
 	QueryExecutor
 	GetQueryerAndUnLocker(ctx context.Context) (Queryer, func())
 	GetQueryerLocked(ctx context.Context, fn func(Queryer) error) error
-	GetDatabaseLocked(ctx context.Context, fn func(db DatabaseInterface) error)
+	GetDatabaseLocked(ctx context.Context, fn func(db DatabaseInterface) error) error
 }
