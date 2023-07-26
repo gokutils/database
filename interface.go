@@ -13,12 +13,6 @@ type Scan interface {
 
 type Scanner func(row Scan) error
 
-type QueryExecutor interface {
-	ExecContext(ctx context.Context, sql string, args ...interface{}) error
-	QueryRowContext(ctx context.Context, scanner Scanner, sql string, args ...interface{}) error
-	QueryContext(ctx context.Context, scanner Scanner, sql string, args ...interface{}) error
-}
-
 type Queryer interface {
 	PrepareContext(ctx context.Context, query string) (*sql.Stmt, error)
 	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
@@ -30,6 +24,12 @@ type DatabaseInterface interface {
 	Queryer
 	BeginTx(ctx context.Context, sopts *sql.TxOptions) (*sql.Tx, error)
 	Begin() (*sql.Tx, error)
+}
+
+type QueryExecutor interface {
+	ExecContext(ctx context.Context, sql string, args ...interface{}) error
+	QueryRowContext(ctx context.Context, scanner Scanner, sql string, args ...interface{}) error
+	QueryContext(ctx context.Context, scanner Scanner, sql string, args ...interface{}) error
 }
 
 type DB interface {
