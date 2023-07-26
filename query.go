@@ -4,18 +4,6 @@ import (
 	"context"
 )
 
-type Scan interface {
-	Scan(v ...interface{}) error
-}
-
-type Scanner func(row Scan) error
-
-type QueryExecutor interface {
-	ExecContext(ctx context.Context, scanner Scanner, sql string) error
-	QueryRowContext(ctx context.Context, scanner Scanner, sql string, args ...interface{}) error
-	QueryContext(ctx context.Context, scanner Scanner, sql string, args ...interface{}) error
-}
-
 func (r *LockerDB) ExecContext(ctx context.Context, sql string, args ...interface{}) error {
 	return r.GetDatabaseLocked(ctx, func(db DatabaseInterface) error {
 		_, err := db.ExecContext(ctx, sql, args...)

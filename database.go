@@ -9,26 +9,6 @@ import (
 	"github.com/gokutils/txctx"
 )
 
-type Queryer interface {
-	PrepareContext(ctx context.Context, query string) (*sql.Stmt, error)
-	ExecContext(ctx context.Context, query string, args ...interface{}) (sql.Result, error)
-	QueryContext(ctx context.Context, query string, args ...interface{}) (*sql.Rows, error)
-	QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row
-}
-
-type DatabaseInterface interface {
-	Queryer
-	BeginTx(ctx context.Context, sopts *sql.TxOptions) (*sql.Tx, error)
-	Begin() (*sql.Tx, error)
-}
-
-type DB interface {
-	QueryExecutor
-	GetQueryerAndUnLocker(ctx context.Context) (Queryer, func())
-	GetQueryerLocked(ctx context.Context, fn func(Queryer) error) error
-	GetDatabaseLocked(ctx context.Context, fn func(db DatabaseInterface) error)
-}
-
 type NoOpBeginDb struct {
 	*sql.Tx
 }
